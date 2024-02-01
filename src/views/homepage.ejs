@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Forms Page</title>
+</head>
+
+<body>
+
+    <!-- First Section -->
+    <section>
+        <h2>Watch Yt</h2>
+        <form id="watchForm" action="/watch" method="post">
+            <label for="watchInput">YT link:</label>
+            <input type="text" id="watchInput" name="videoLink" placeholder="Paste Youtube link" required>
+            <button type="submit">Watch</button>
+        </form>
+    </section>
+
+    <!-- Second Section -->
+    <section>
+        <h2>Watch Yt with someone</h2>
+        <form id="joinForm" action="/join" method="post">
+            <label for="joinInput">Join Code:</label>
+            <input type="text" id="joinInput" name="joinCode" placeholder="Paste Join Code" required>
+            <button type="submit">Join</button>
+        </form>
+    </section>
+
+</body>
+
+</html>

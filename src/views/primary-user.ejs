@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+
+    <p>Joining Code: <%= uId %>
+    </p>
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+    <!-- Progress bar -->
+    <div class="progress" style="width: 640px;" onclick="emitClickProgress(event, socket)">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div>
+        <button onclick="pauseVideo()">Pause</button>
+        <button onclick="playVideo()">Play</button>
+    </div>
+
+    <script>
+        var progressBar = document.getElementById('progress-bar');
+        var progressInterval;
+        var player;
+
+        // This code loads the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // This function creates an <iframe> (and YouTube player)
+        // after the API code downloads.
+        function onYouTubeIframeAPIReady() {
+            var vId = "<%= vId %>";
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: vId,
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'iv_load_policy': 3,
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'showinfo': 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // The API will call this function when the video player is ready.
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // The API calls this function when the player's state changes.
+        function onPlayerStateChange(event) {
+            updateProgressBar();
+            if (event.data != YT.PlayerState.PLAYING) {
+                // Stop updating the progress bar
+                clearInterval(progressInterval);
+            }
+        }
+
+        // Update the progress bar based on video playback progress
+        function updateProgressBar() {
+            progressInterval = setInterval(() => {
+                var currentTime = player.getCurrentTime();
+                var duration = player.getDuration();
+                var progressPercentage = (currentTime / duration) * 100;
+
+                // Update the progress bar width
+                progressBar.style.width = progressPercentage + "%";
+                progressBar.setAttribute('aria-valuenow', progressPercentage);
+            }, 1000);
+        }
+
+
+        function emitClickProgress(event, socket) {
+            socket.emit('hello', 'world');
+            clickProgressBar(event);
+        }
+
+        // Seek to the clicked position on the progress bar
+        function clickProgressBar(event) {
+            var progressBar = document.getElementById("progress-bar");
+            var progressContainer = document.querySelector(".progress");
+            var containerWidth = progressContainer.offsetWidth;
+
+            // Calculate the clicked position as a percentage of the container width
+            var clickedPosition = event.clientX - progressContainer.getBoundingClientRect().left;
+            var percentage = (clickedPosition / containerWidth) * player.getDuration();
+
+            progressBar.setAttribute("aria-valuenow", percentage);
+            player.seekTo(percentage);
+        }
+
+        function pauseVideo() {
+            socket.emit('pause');
+            player.pauseVideo();
+        }
+
+        function playVideo() {
+            socket.emit('play');
+            player.playVideo();
+        }
+
+
+
+        socket.on('hello', (arg) => {
+            alert(arg);
+        });
+
+
+    </script>
+</body>
+
+</html>
