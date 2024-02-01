@@ -16,7 +16,7 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
     <!-- Progress bar -->
-    <div class="progress" style="width: 640px;" onclick="emitClickProgress(event, socket)">
+    <div class="progress" style="width: 640px;" onclick="emitClickProgress(event)">
         <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
             aria-valuemin="0" aria-valuemax="100"></div>
     </div>
@@ -29,6 +29,7 @@
         var progressBar = document.getElementById('progress-bar');
         var progressInterval;
         var player;
+        const socket = io();
 
         // This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');

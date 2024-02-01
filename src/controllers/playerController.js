@@ -23,5 +23,5 @@ export const player = async (req, res) => {
         .slice(0, 7);
 
     console.log("Unique ID:", uniqueId);
-    res.render("primary-user", {vId : videoId, uId : uniqueId, socket : io})
+    res.render("primary-user", {vId : videoId, uId : uniqueId})
 }
