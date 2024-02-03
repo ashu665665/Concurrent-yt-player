@@ -42,7 +42,7 @@ export const player = async (req, res) => {
             });
         
             socket.on('event', ( data ) => {
-                console.log(`Upcoming Event to ${rId}: ` + data )
+                console.log(`Upcoming Event to ${rId} -> state: ` + data.state + `, time: ` + data.time)
                 // Broadcast the event to all clients in the specified room
                 io.to(rId).emit('event', data);
             });
