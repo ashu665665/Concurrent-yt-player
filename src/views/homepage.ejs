@@ -4,30 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Forms Page</title>
+    <title>Watch YouTube</title>
+
+    <!-- NAVIGATION -->
+  <link rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css">
+
 </head>
 
 <body>
+    <div class="container mx-auto my-5" style="max-width: 600px;">
+        <!-- Single Form Section -->
+        <section>
+            <h2>Watch YouTube</h2>
+            <form id="watchForm" action="/watch" method="post">
+                <input class="form-control form-control-lg" type="text" id="watchInput" name="videoLink"
+                    placeholder="Paste YouTube link">
+        </section>
 
-    <!-- First Section -->
-    <section>
-        <h2>Watch Yt</h2>
-        <form id="watchForm" action="/watch" method="post">
-            <label for="watchInput">YT link:</label>
-            <input type="text" id="watchInput" name="videoLink" placeholder="Paste Youtube link">
-            
-        
-    </section>
+        <!-- Second Section -->
+        <section class="mt-10">
+            <h2>Watch YouTube with someone</h2>
+            <input class="form-control form-control-lg" type="text" id="joinInput" name="joinCode"
+                placeholder="Paste Join Code">
+            <button class="mt-5" type="submit">Watch</button>
+            </form>
+        </section>
 
-    <!-- Second Section -->
-    <section>
-        <h2>Watch Yt with someone</h2>
-        
-            <label for="joinInput">Join Code:</label>
-            <input type="text" id="joinInput" name="joinCode" placeholder="Paste Join Code">
-            <button type="submit">Watch</button>
-        </form>
-    </section>
+    </div>
 
 </body>
 
