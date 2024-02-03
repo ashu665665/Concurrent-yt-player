@@ -19,15 +19,6 @@ app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs");
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('acbc837', (event) => {
-        console.log(event);
-        io.emit('acbc837', event);
-    });
-});
-
-
 
 // routes
 app.use(playerRoutes);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <script src="/socket.io/socket.io.js"></script>
@@ -10,16 +10,18 @@
 
 <body>
 
-
     <p>Joining Code: <%= uId %>
     </p>
+
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
+
     <!-- Progress bar -->
     <div class="progress" style="width: 640px;" onclick="clickProgressBar(event)">
         <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
             aria-valuemin="0" aria-valuemax="100"></div>
     </div>
+
     <div>
         <button onclick="pauseVid()">Pause</button>
         <button onclick="playVid()">Play</button>
@@ -29,7 +31,11 @@
         var progressBar = document.getElementById('progress-bar');
         var progressInterval;
         var player;
+        // Connect to the specific namespace based on the uniqueId
         const socket = io();
+        // Emit 'joinRoom' event to join the room associated with the video
+        socket.emit('joinRoom', { roomId: '<%= uId %>' });
+
 
         // This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');
@@ -65,7 +71,6 @@
         function onPlayerReady(event) {
             event.target.playVideo();
         }
-
 
         // The API calls this function when the player's state changes.
         function onPlayerStateChange(event) {
@@ -106,20 +111,20 @@
             } else if (player.getPlayerState() === 2) {
                 mydata = { state: 'pause', time: percentage };
             }
-            socket.emit('acbc837', mydata);
+            socket.emit('event', mydata); // Emit to the specific namespace
         }
 
         function pauseVid() {
             var mydata = { state: 'pause', time: player.getCurrentTime() };
-            socket.emit('acbc837', mydata);
+            socket.emit('event', mydata); // Emit to the specific namespace
         }
 
         function playVid() {
             var mydata = { state: 'play', time: player.getCurrentTime() };
-            socket.emit('acbc837', mydata);
+            socket.emit('event', mydata); // Emit to the specific namespace
         }
 
-        socket.on('acbc837', (event) => {
+        socket.on('event', (event) => {
             player.seekTo(event.time);
             if (event.state === 'play') {
                 player.playVideo();
